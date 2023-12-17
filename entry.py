@@ -26,11 +26,6 @@ def Tdentry():
 def SLentry():
     mydb=mq.connect(host="localhost",user="root",password="12345",database="cbse24",auth_plugin='mysql_native_password')
     myc=mydb.cursor()
-    uid=input("Enter your USER-ID ")
-    pwd=input("Enter the password ")
-    info="INSERT into SLogin values ('{}','{}')".format(uid,pwd)
-    myc.execute(info)
-    myc.execute("commit")
     myc.close()
 def Sdentry():
     mydb=mq.connect(host="localhost",user="root",password="12345",database="cbse24",auth_plugin='mysql_native_password')
@@ -43,4 +38,3 @@ def Sdentry():
     myc.execute(info)
     myc.execute("commit")
     myc.close()
-    print("Hello")
