@@ -45,7 +45,12 @@ def SLentry():
     name = input("Enter your username(uid)")
     passw = input("Enter your new Password:")
     q="select pwd from SLogin where uid='{}'".format(name)
-    x=myc.execute(q)
+    myc.execute(q)
+    x=myc.fetchone()
+    if passw == x[0]:
+         print ("Login Sucessfull")
+    else:
+         print("Person Not Found")
     myc.close()
 
 def TLentry():
@@ -53,9 +58,13 @@ def TLentry():
     myc=mydb.cursor()
     name = input("Enter your username(uid)")
     passw = input("Enter your new Password:")
-    q="select pwd from SLogin where uid='{}'".format(name)
-    x=myc.execute(q)
-
+    q="select pwd from TLogin where uid='{}'".format(name)
+    myc.execute(q)
+    x=myc.fetchone()
+    if passw == x[0]:
+         print ("Login Sucessfull")
+    else:
+         print("Person Not Found")
     myc.close()
 def Tdentry():
     mydb=mq.connect(host="localhost",user="root",password="2005",database="cs_proj")
@@ -105,7 +114,7 @@ def Tmenu():
              TLentry()
         if c == 2:
             Tdentry()
-         
+        
 
 menu()
 
