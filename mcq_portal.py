@@ -36,7 +36,14 @@ def menu():
          Smenu()
 
 def Smenu():
-        print("~MENU~ \nPress 1 to LOGIN. \nPress 2 to . \nPress 3 to check marks")
+        print("~MENU~ \nPress 1 to LOGIN. \nPress 2 to register . \nPress 3 to check marks")
+        c=int(input("Enter your choice: "))
+        # if c == 1:
+             
+        # if c == 2:
+        
+        # if c == 3:
+             
 
 
 menu()
