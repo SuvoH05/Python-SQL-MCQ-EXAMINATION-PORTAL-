@@ -43,4 +43,4 @@ def Sdentry():
     myc.execute(info)
     myc.execute("commit")
     myc.close()
-    
+    print("Hello")
