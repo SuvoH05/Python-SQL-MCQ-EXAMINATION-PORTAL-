@@ -49,6 +49,7 @@ def SLentry():
     x=myc.fetchone()
     if passw == x[0]:
          print ("Login Sucessfull")
+         SMenu()
     else:
          print("Person Not Found")
     myc.close()
@@ -63,6 +64,7 @@ def TLentry():
     x=myc.fetchone()
     if passw == x[0]:
          print ("Login Sucessfull")
+         TMenu()
     else:
          print("Person Not Found")
     myc.close()
@@ -114,6 +116,11 @@ def Tmenu():
              TLentry()
         if c == 2:
             Tdentry()
+
+def TMenu():
+    print("~Teacher MENU~ \nPress 1 to Check Upload Question paper. \nPress 2 to Check Papers. \nPress 3 to check Your Profile")
+def SMenu():
+    print("~Student MENU~ \nPress 1 to Check available exams. \nPress 2 to Check Marks. \nPress 3 to check Your Profile")
         
 
 menu()
