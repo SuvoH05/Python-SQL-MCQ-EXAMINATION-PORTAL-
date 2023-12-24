@@ -1,7 +1,7 @@
 import mysql.connector as mq
 import csv
-pwsd = input("Enter your password")
-db = input("Enter your database:")
+pwsd = input("Enter your password: ")
+db = input("Enter your database: ")
 def Tdetails():
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
     myc=mydb.cursor()
@@ -131,37 +131,38 @@ def Exam():
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
     myc=mydb.cursor()
     myc.execute("drop table if exists Exam1 ")
-    myc.execute("create table Exam1(QID varchar(3),question varchar(255),op1 varchar(30),op2 varchar(30),op3 varchar(30),op4 varchar(30),primary key(QID))")
+    myc.execute("create table Exam1(QID varchar(5),question varchar(255),op1 varchar(100),op2 varchar(100),op3 varchar(100),op4 varchar(100),primary key(QID))")
     myc.execute("commit")
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
     myc=mydb.cursor()
     myc.execute("drop table if exists Exam2 ")
-    myc.execute("create table Exam2(QID varchar(3),question varchar(255),op1 varchar(30),op2 varchar(30),op3 varchar(30),op4 varchar(30),primary key(QID))")
+    myc.execute("create table Exam2(QID varchar(5),question varchar(255),op1 varchar(100),op2 varchar(100),op3 varchar(100),op4 varchar(100),primary key(QID))")
     myc.execute("commit")
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
     myc=mydb.cursor()
     myc.execute("drop table if exists Exam3 ")
-    myc.execute("create table Exam3(QID varchar(3),question varchar(255),op1 varchar(30),op2 varchar(30),op3 varchar(30),op4 varchar(30),primary key(QID))")
+    myc.execute("create table Exam3(QID varchar(5),question varchar(255),op1 varchar(100),op2 varchar(100),op3 varchar(100),op4 varchar(100),primary key(QID))")
     myc.execute("commit")
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
     myc=mydb.cursor()
     myc.execute("drop table if exists Exam4 ")
-    myc.execute("create table Exam4(QID varchar(3),question varchar(255),op1 varchar(30),op2 varchar(30),op3 varchar(30),op4 varchar(30),primary key(QID))")
+    myc.execute("create table Exam4(QID varchar(5),question varchar(255),op1 varchar(100),op2 varchar(100),op3 varchar(100),op4 varchar(100),primary key(QID))")
     myc.execute("commit")
 def Qupdate():
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
     myc=mydb.cursor()
-    csvname = "D:\\Proj_new\\Python-SQL-MCQ-EXAMINATION-PORTAL-\\exam1.csv" #input("Enter the name of your file: ")
-    tname = csvname[50:-4]
+    csvname = "exam1.csv" #input("Enter the name of your file: ")
+    tname = csvname[0:-4]
     fl=open(csvname,"r")
     file=csv.reader(fl,delimiter=",")
     for row in file:
-         myc.execute("insert into {t} values('{}','{}','{}','{}','{}','{}')").format(t=tname,row[0],row[1],row[2],row[3],row[4],row[5])
-         myc.execute("commit")
-          
+        query = f"insert into {tname} values (%s,%s,%s,%s,%s,%s)"
+        myc.execute(query,(row[0],row[1],row[2],row[3],row[4],row[5]))
+        myc.execute("commit")
+         
 # Exam()
 # menu()
-Qupdate()
+# Qupdate()
 # TLogin()
 # Tdetails()
 # SLogin()
