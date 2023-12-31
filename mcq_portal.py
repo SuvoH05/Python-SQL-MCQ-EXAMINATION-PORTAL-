@@ -51,7 +51,7 @@ def SLentry():
     x=myc.fetchone()
     if passw == x[0]:
          print ("Login Sucessfull")
-         SMenu(name)
+         Soption(name)
     else:
          print("Person Not Found")
     myc.close()
@@ -66,7 +66,7 @@ def TLentry():
     x=myc.fetchone()
     if passw == x[0]:
          print ("Login Sucessfull")
-         TMenu(name)
+         Toption(name)
     else:
          print("Person Not Found")
     myc.close()
@@ -119,12 +119,12 @@ def Tmenu():
         if c == 2:
             Tdentry()
 
-def TMenu(tid):
+def Toption(tid):
     print("~Teacher MENU~ \nPress 1 to Upload Question paper. \nPress 2 to Check marks of the students. \nPress 3 to check Your Profile")
     # choice = int(input("Enter your choice: "))
     # if choice == 1:
          
-def SMenu(sid):
+def Soption(sid):
     print("~Student MENU~ \nPress 1 to Check available exams. \nPress 2 to Check Marks. \nPress 3 to check Your Profile")
 
 def Exam():
@@ -151,7 +151,7 @@ def Exam():
 def Qupdate():
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
     myc=mydb.cursor()
-    csvname = "exam1.csv" #input("Enter the name of your file: ")
+    csvname = input("Enter the name of your file: ")
     tname = csvname[0:-4]
     fl=open(csvname,"r")
     file=csv.reader(fl,delimiter=",")
@@ -159,10 +159,68 @@ def Qupdate():
         query = f"insert into {tname} values (%s,%s,%s,%s,%s,%s)"
         myc.execute(query,(row[0],row[1],row[2],row[3],row[4],row[5]))
         myc.execute("commit")
-         
+# def check_exams():
+#     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
+#     myc=mydb.cursor()
+#     myc.execute("show tables")
+#     exams=myc.fetchall()
+#     print(exams)
+#     e1=[]
+#     print("~AVAILABLE EXAMS~")
+#     for items in exams:
+#         e1.append(items[0])
+#     for i in range(len(e1)):
+#         if e1[i][0:4]=="exam":
+#              print(i+1,". ",e1[i])
+def check_exams():
+    mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
+    myc=mydb.cursor()
+    myc.execute("Show tables")
+    exams = myc.fetchall()
+    e1=[]
+    for item in exams:
+        e1.append(item[0])
+    print("~AVAILABLE EXAMS~")
+    for item in e1:
+         if(item[0:4]=="exam"):
+              print(item)
+    choice = input("Enter the exam you want to appear: ")
+    if choice in e1 :
+        myc.execute(f"select qid from {choice}")
+        qids = myc.fetchall()
+    qid=[]
+    for item in qids:
+        qid.append(item[0])
+    print(qid)
+    for i in range(len(qid)):
+        qn = "QC0"+str(i+1)
+        # myc.execute(f"select question from {choice} where qid="{}"".format(qn))
+        query = f"select question from {choice} where qid=%s"
+        myc.execute(query,(qn,))
+        p=myc.fetchone()
+        print(i+1,".",p[0])
+        query = f"select op1 from {choice} where qid=%s"
+        myc.execute(query,(qn,))
+        a=myc.fetchone()
+        print("A.",a[0])
+        query = f"select op2 from {choice} where qid=%s"
+        myc.execute(query,(qn,))
+        b=myc.fetchone()
+        print("B.",b[0])
+        query = f"select op3 from {choice} where qid=%s"
+        myc.execute(query,(qn,))
+        c=myc.fetchone()
+        print("C.",c[0])
+        query = f"select op4 from {choice} where qid=%s"
+        myc.execute(query,(qn,))
+        d=myc.fetchone()
+        print("D.",d[0])
+        
+    
 # Exam()
-# menu()
 # Qupdate()
+check_exams()
+# menu()
 # TLogin()
 # Tdetails()
 # SLogin()
