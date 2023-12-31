@@ -1,5 +1,6 @@
 import mysql.connector as mq
 import csv
+from datetime import date
 pwsd = input("Enter your password: ")
 db = input("Enter your database: ")
 def Tdetails():
@@ -25,6 +26,15 @@ def Sdetails():
     myc.execute("create table Sdetails(uid int, SID varchar(15), Name varchar(35), class int, dob date, Contact bigint, primary key(SID),foreign key(uid) references Slogin(uid))")
     myc.execute("commit")
     myc.close()
+
+def SMarks():
+    mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
+    myc=mydb.cursor()
+    myc.execute("drop table if exists SMarks ")
+    myc.execute("create table SMarks(uid int, Marks int, foreign key(uid) references Slogin(uid))")
+    myc.execute("commit")
+    myc.close()
+     
 def Sdentry():
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
     myc=mydb.cursor()
@@ -124,8 +134,23 @@ def Toption(tid):
     # choice = int(input("Enter your choice: "))
     # if choice == 1:
          
-def Soption(sid):
+def Soption(uid):
+    mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
+    myc=mydb.cursor()
+    # today = date.today()
     print("~Student MENU~ \nPress 1 to Check available exams. \nPress 2 to Check Marks. \nPress 3 to check Your Profile")
+    choice = int(input("Enter your choice: "))
+    if choice == 1:
+        check_exams()
+        p=5
+        q="insert into smarks values(%s,%s,%s)"
+        myc.execute(q,(uid,p))
+        mydb.commit()
+    if choice == 2:
+        query="select * from smarks where uid=%s"
+        myc.execute(query,(uid,))
+        marks = myc.fetchone()
+        print("Your Marks : ",marks[1])
 
 def Exam():
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
@@ -185,14 +210,20 @@ def check_exams():
          if(item[0:4]=="exam"):
               print(item)
     choice = input("Enter the exam you want to appear: ")
+    ans="answer"+choice[4::]+".csv"
+    print(ans)
+    a_list=ans_list(ans)
+    print(a_list)
     if choice in e1 :
         myc.execute(f"select qid from {choice}")
         qids = myc.fetchall()
     qid=[]
     for item in qids:
         qid.append(item[0])
-    print(qid)
+    # print(qid)
+    marks=0
     for i in range(len(qid)):
+        opt=["A","B","C","D"]
         qn = "QC0"+str(i+1)
         # myc.execute(f"select question from {choice} where qid="{}"".format(qn))
         query = f"select question from {choice} where qid=%s"
@@ -215,11 +246,33 @@ def check_exams():
         myc.execute(query,(qn,))
         d=myc.fetchone()
         print("D.",d[0])
+        x=input("Enter YOUR FUCKING CHOICE: ")
+        if x == a_list[i][1]:
+             marks+=1
+        else:
+             print("WRONG ANSWER !! U DUMBASS - .. Must be women ☕ hahaahahah")
+    print("TOTAL MARKS: ",marks)
+    return marks
+
+def ans_list(a):
+    fl=open(a,"r")
+    file=csv.reader(fl,delimiter=",")
+    q="A"
+    answers=[]
+    for row in file:
+        answers.append(row)
+    # print(answers)
+    return answers
+            
         
-    
+
 # Exam()
 # Qupdate()
-check_exams()
+# check_exams()
+# SMarks()
+# Soption()
+# ans()
+SLentry()
 # menu()
 # TLogin()
 # Tdetails()
