@@ -1,0 +1,9 @@
+Qid,Questions,Option1,Option2,Option3,Option4
+QCS01,"In a table in MYSQL database, an attribute A of datatype varchar(20) has the value “Keshav”. The attribute B of datatype char(20) has value “Meenakshi”. How many characters are occupied by attribute A and attribute B?","20,6","6,20","9,6","6,9"
+QCS02,What will be the output of the following statement: print(3-2**2**3+99/11),244,244,-244,Error
+QCS03,"In MYSQL database, if a table, Alpha has degree 5 and cardinality 3, and another table, Beta has degree 3 and cardinality 5, what will be the degree and cardinality of the Cartesian product of Alpha and Beta?","5,3","18,15","3,5","15,18"
+QCS04,Riya wants to transfer pictures from her mobile phone to her laptop. She uses Bluetooth Technology to connect two devices. Which type of network will be formed in this case?,PAN,LAN,WAN,MAN
+QCS05,Which of the following will delete key-value pair for key = “Red” from a dictionary D1?,"delete D1(""Red"") ","del D1[""Red""] ","del.D1[""Red""]"," D1.del[""Red""]"
+QCS06,The modem at the sender’s computer end acts as a ____________.,Modulator,Demodulator,Convertor,Model
+QCS07,Which of the following functions changes the position of file pointer and returns its new position?,"flush()
+",tell(),seek(),offset()
