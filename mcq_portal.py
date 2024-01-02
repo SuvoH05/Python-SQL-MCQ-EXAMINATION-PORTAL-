@@ -2,188 +2,279 @@ import mysql.connector as mq
 import csv
 from datetime import date
 pwsd = input("Enter your password: ")
-db = input("Enter your database: ")
+db =input("Enter your database: ")
 def Tdetails():
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
     myc=mydb.cursor()
     myc.execute("drop table if exists Tdetails ")
-    myc.execute("create table Tdetails(uid int, TID int, Name varchar(35), dob date, Salary float, doj date, Subject varchar(50), Contact bigint, primary key(TID),foreign key(uid) references Tlogin(uid))")
+    myc.execute("create table Tdetails(uid varchar(20), TID int, Name varchar(35), dob date, Salary float, doj date, Subject varchar(50), Contact bigint, primary key(TID),foreign key(uid) references Tlogin(uid))")
     myc.execute("commit")
     myc.close()
 
+def Sdetails():
+    mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
+    myc=mydb.cursor()
+    myc.execute("drop table if exists Sdetails ")
+    myc.execute("create table Sdetails(uid varchar(20), SID varchar(15), Name varchar(35), class int, dob date, Contact bigint, primary key(SID),foreign key(uid) references Slogin(uid))")
+    myc.execute("commit")
+    myc.close()
+
+def SLogin():
+    mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
+    myc=mydb.cursor()
+    myc.execute("drop table if exists Sdetails ")
+    myc.execute("drop table if exists SLogin ")
+    myc.execute("create table SLogin(uid varchar(20), pwd varchar(10), primary key(uid))")
+    myc.execute("commit")
 
 def TLogin():
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
     myc=mydb.cursor()
     myc.execute("drop table if exists Tdetails ")
     myc.execute("drop table if exists TLogin ")
-    myc.execute("create table TLogin(uid int, pwd varchar(10), primary key(uid))")
+    myc.execute("create table TLogin(uid varcahr(20), pwd varchar(10), primary key(uid))")
     myc.execute("commit")
-def Sdetails():
-    mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
-    myc=mydb.cursor()
-    myc.execute("drop table if exists Sdetails ")
-    myc.execute("create table Sdetails(uid int, SID varchar(15), Name varchar(35), class int, dob date, Contact bigint, primary key(SID),foreign key(uid) references Slogin(uid))")
-    myc.execute("commit")
-    myc.close()
 
 def SMarks():
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
     myc=mydb.cursor()
     myc.execute("drop table if exists SMarks ")
-    myc.execute("create table SMarks(uid int, Marks int, foreign key(uid) references Slogin(uid))")
+    myc.execute("create table SMarks(uid varchar(20), Marks int)")
     myc.execute("commit")
     myc.close()
      
 def Sdentry():
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
     myc=mydb.cursor()
-    uid=int(input("Enter your User-ID "))
-    sid=input("Enter your Student-ID ")
-    pwd=input("Enter the password")
-    name=input("Enter your name ")
-    dob=input("Enter your date of birth ")
-    clas=int(input("Enter the class "))
-    con=int(input("Enter your contact no. "))
-    info="INSERT into Sdetails values ({},'{}','{}',{},'{}',{})".format(uid,sid,name,clas,dob,con)
-    info1="INSERT into SLogin values ({},'{}')".format(uid,pwd)
+    uid=input("Enter your User-ID: ")
+    sid=input("Enter your Student-ID: ")
+    pwd=input("Enter the password: ")
+    name=input("Enter your name: ")
+    dob=input("Enter your date of birth: ")
+    clas=int(input("Enter the class: "))
+    con=int(input("Enter your contact no: "))
+    info="INSERT into Sdetails values ('{}','{}','{}',{},'{}',{})".format(uid,sid,name,clas,dob,con)
+    info1="INSERT into SLogin values ('{}','{}')".format(uid,pwd)
     myc.execute(info1)
     myc.execute(info)
     myc.execute("commit")
     myc.close()
+    Smenu()
 def SLentry():
+    print()
+    print("\t\t        ********************\n"
+                "\t\t\t| ~ S I G N  I N ~ |\n"
+          "\t\t        ********************\n","\t")
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
     myc=mydb.cursor()
-    name = input("Enter your username(uid)")
-    passw = input("Enter your new Password:")
+    name = input("Enter your username(uid): ")
+    passw = input("Enter your new Password: ")
     q="select pwd from SLogin where uid='{}'".format(name)
     myc.execute(q)
     x=myc.fetchone()
-    if passw == x[0]:
-         print ("Login Sucessfull")
-         Soption(name)
-    else:
-         print("Person Not Found")
+    try:
+        if passw == x[0]:
+            print ("Login Sucessfull")
+            Soption(name)
+        else:
+            print("Person Not Found")
+    except TypeError:
+        print("Type Error... try again.")
+        Smenu()
     myc.close()
 
 def TLentry():
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
     myc=mydb.cursor()
-    name = input("Enter your username(uid)")
-    passw = input("Enter your new Password:")
+    name = input("\nEnter your username(uid): ")
+    passw = input("Enter your new Password: ")
+    print()
     q="select pwd from TLogin where uid='{}'".format(name)
     myc.execute(q)
     x=myc.fetchone()
-    if passw == x[0]:
-         print ("Login Sucessfull")
-         Toption(name)
-    else:
-         print("Person Not Found")
+    try:
+        if passw == x[0]:
+            print ("Login Sucessfull")
+            Toption(name)
+        else:
+            print("Person Not Found.")
+    except TypeError:
+        print("TypeError try agin...")
+        Tmenu()
     myc.close()
 def Tdentry():
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
     myc=mydb.cursor()
-    uid=input("Enter your Teacher-ID ")
-    tid=input("Enter your Teacher-ID ")
-    pwd=input("Enter your password-")
-    name=input("Enter your name ")
-    sub=input("Enter the suject you are expertised in ")
-    dob=input("Enter your Date of Birth(yyyy-mm-dd) ")
-    sal=float(input("Enter your Salary "))
-    doj=input("Enter your Date of Joining(yyyy-mm-dd) ")
-    con=int(input("Enter your contact no. "))
-    info="INSERT into Tdetails values ({},{},'{}','{}',{},'{}','{}',{})".format(uid,tid,name,dob,sal,doj,sub,con)
-    info1="INSERT into TLogin values ({},'{}')".format(uid,pwd)
-    myc.execute(info1)
-    myc.execute(info)
+    print("Signing you up......")
+    try:
+        uid=input("Enter your Teacher-ID: ")
+        tid=input("Enter your Teacher-ID: ")
+        pwd=input("Enter your password-")
+        name=input("Enter your name: ")
+        sub=input("Enter the suject you are expertised in: ")
+        dob=input("Enter your Date of Birth(yyyy-mm-dd): ")
+        sal=float(input("Enter your Salary: "))
+        doj=input("Enter your Date of Joining(yyyy-mm-dd): ")
+        con=int(input("Enter your contact no: "))
+        info="INSERT into Tdetails values ({},{},'{}','{}',{},'{}','{}',{})".format(uid,tid,name,dob,sal,doj,sub,con)
+        info1="INSERT into TLogin values ({},'{}')".format(uid,pwd)
+        myc.execute(info1)
+        myc.execute(info)
+    except:
+        print("Error!... Sign up and Try again.")
+        Tmenu()
     myc.execute("commit")
     myc.close()
-def SLogin():
-    mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
-    myc=mydb.cursor()
-    myc.execute("drop table if exists Sdetails ")
-    myc.execute("drop table if exists SLogin ")
-    myc.execute("create table SLogin(uid int, pwd varchar(10), primary key(uid))")
-    myc.execute("commit")
+
 
 def menu():
-    print("Enter 1 if you are a student. \nEnter 2 if you are a teacher.")
-    a=int(input("Enter your choice: "))
-    if a == 1:
-         Smenu()
-    if a == 2:
-         Tmenu()
+    title()
+    print("\t   ENTER 1 IF YOU ARE A STUDENT. \n\t   ENTER 2 IF YOU ARE A TEACHER.\n\t   ENTER 3 TO EXIT.\n")
+    try:
+        a=int(input("Enter your choice: "))
+        if a == 1:
+            Smenu()
+        if a == 2:
+            Tmenu()
+        if a == 3:
+            exit
+        elif a !=1 and a !=2 and a !=3 :
+                print("Wrong input ! . . . enter your choice again....")
+                menu()
+    except ValueError:
+        print("Value Error! Try Again..")
+        menu()
 
 def Smenu():
-        print("~MENU~ \nPress 1 to SignIn. \nPress 2 to SignUp . \nPress 3 to check marks")
-        c=int(input("Enter your choice: "))
-        if c == 1:
-             SLentry()
-        if c == 2:
-            Sdentry()
+        print()
+        print("\t\t        *******************************\n"
+                "\t\t\t| ~ S T U D E N T   M E N U ~ |\n"
+          "\t\t        *******************************\n","\n\t   PRESS 1 TO SIGNIN. \n\t   PRESS 2 TO SIGNUP . \n\t   PRESS 3 TO GO BACK TO MAIN MENU")
+        print()
+        try:
+            c=int(input("Enter your choice: "))
+            if c == 1:
+                SLentry()
+            if c == 2:
+                Sdentry()
+            if c == 3:
+                menu()
+            elif c != 1 and c != 2 and c != 3:
+                print("Wrong input ! . . . enter your choice again....")
+                Smenu()
+        except ValueError:
+            print("ValueError! Try again....")
+            Smenu()
+            
 def Tmenu():
-        print("~MENU~ \nPress 1 to SignIn. \nPress 2 to SignUp . \nPress 3 to check marks")
-        c=int(input("Enter your choice: "))
-        if c == 1:
-             TLentry()
-        if c == 2:
-            Tdentry()
-
+        print()
+        print("\t\t        *******************************\n"
+                "\t\t\t| ~ T E A C H E R   M E N U ~ |\n"
+          "\t\t        *******************************\n","\t   PRESS 1 TO SIGNIN. \n\t   PRESS 2 TO SIGNUP . \n\t   PRESS 3 TO GO BACK TO MAIN MENU")
+        print()
+        try:
+            c=int(input("Enter your choice: "))
+            if c == 1:
+                TLentry()
+            if c == 2:
+                Tdentry()
+            if c == 3:
+                menu()
+            elif c != 1 and c != 2 and c != 3:
+                    print("Wrong input ! . . . enter your choice again....")
+                    Tmenu()
+        except ValueError:
+            print("ValueError! Please Enter numeric value.")
+            Tmenu()
 def Toption(tid):
-    print("~Teacher MENU~ \nPress 1 to Upload Question paper. \nPress 2 to Check marks of the students. \nPress 3 to check Your Profile")
-    # choice = int(input("Enter your choice: "))
-    # if choice == 1:
+    mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
+    myc=mydb.cursor()
+    #print("~Teacher MENU~ \nPress 1 to Upload Question paper. \nPress 2 to Check marks of the students. \nPress 3 to check Your Profile")
+    print()
+    print("\t\t        *********************\n"
+                "\t\t\t| ~ O P T I O N S ~ |\n"
+          "\t\t        *********************\n","\t \nPress 1 to Upload question paper. \nPress 2 to Check Marks of the students. \nPress 3 to LOG OUT")
+    print()
+    try:
+        choice = int(input("Enter your choice: "))
+        if (choice) == 1:
+            Qupdate(tid)
+            Toption(tid)
+        if (choice) == 2:
+            myc.execute("select * from smarks")
+            marks=myc.fetchall()
+            print("\n\t\t        **********************\n"
+                "\t\t\t| ~ Students Marks ~ |\n"
+          "\t\t        **********************\n")
+            for i in range(len(marks)):
+                print("\t\tStudent:",marks[i][0],", Marks",marks[i][1])
+            Toption(tid)
+        if (choice) == 3:
+            Tmenu()
+        elif (choice) !=1 and choice !=2 and choice !=3 :
+            print("Wrong input ! . . . enter your choice again....")
+            Toption(tid)
+    except ValueError:
+        print('Value Error')
+        Toption(tid)
          
 def Soption(uid):
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
     myc=mydb.cursor()
+    p=uid
     # today = date.today()
-    print("~Student MENU~ \nPress 1 to Check available exams. \nPress 2 to Check Marks. \nPress 3 to check Your Profile")
-    choice = int(input("Enter your choice: "))
-    if choice == 1:
-        check_exams()
-        p=5
-        q="insert into smarks values(%s,%s,%s)"
-        myc.execute(q,(uid,p))
-        mydb.commit()
-    if choice == 2:
-        query="select * from smarks where uid=%s"
-        myc.execute(query,(uid,))
-        marks = myc.fetchone()
-        print("Your Marks : ",marks[1])
+    print()
+    print("\t\t        *********************\n"
+                "\t\t\t| ~ O P T I O N S ~ |\n"
+          "\t\t        *********************\n","\t \nPress 1 to Check available exams. \nPress 2 to Check Marks. \nPress 3 to LOG OUT")
+    try:
+        choice = int(input("Enter your choice: "))
+        if choice == 1:
+            check_exams(uid)
+            Soption(p)
+        if choice == 2:
+            query="select * from smarks where uid=%s"
+            myc.execute(query,(uid,))
+            marks = myc.fetchall()
+            print("\n\t\tYOUR MARKS :- ")
+            for i in range(len(marks)):
+                print("\t\tExam no.",i+1," Marks: ",marks[i][1])
+            Soption(uid)
+        if choice == 3:
+            menu()
+        
+        elif choice !=1 and choice !=2 and choice !=3 :
+            print("Wrong input ! . . . enter your choice again....")
+            Soption(uid)
+    except ValueError:
+        print('Value Error')
 
-def Exam():
+def Exam(x):
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
     myc=mydb.cursor()
-    myc.execute("drop table if exists Exam1 ")
-    myc.execute("create table Exam1(QID varchar(5),question varchar(255),op1 varchar(100),op2 varchar(100),op3 varchar(100),op4 varchar(100),primary key(QID))")
+    q1=f"drop table if exists {x}"
+    myc.execute(q1)
+    q2=f"create table {x} (QID varchar(5),question varchar(255),op1 varchar(100),op2 varchar(100),op3 varchar(100),op4 varchar(100),primary key(QID))"
+    myc.execute(q2)
     myc.execute("commit")
+    
+def Qupdate(tid):
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
     myc=mydb.cursor()
-    myc.execute("drop table if exists Exam2 ")
-    myc.execute("create table Exam2(QID varchar(5),question varchar(255),op1 varchar(100),op2 varchar(100),op3 varchar(100),op4 varchar(100),primary key(QID))")
-    myc.execute("commit")
-    mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
-    myc=mydb.cursor()
-    myc.execute("drop table if exists Exam3 ")
-    myc.execute("create table Exam3(QID varchar(5),question varchar(255),op1 varchar(100),op2 varchar(100),op3 varchar(100),op4 varchar(100),primary key(QID))")
-    myc.execute("commit")
-    mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
-    myc=mydb.cursor()
-    myc.execute("drop table if exists Exam4 ")
-    myc.execute("create table Exam4(QID varchar(5),question varchar(255),op1 varchar(100),op2 varchar(100),op3 varchar(100),op4 varchar(100),primary key(QID))")
-    myc.execute("commit")
-def Qupdate():
-    mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
-    myc=mydb.cursor()
-    csvname = input("Enter the name of your file: ")
-    tname = csvname[0:-4]
-    fl=open(csvname,"r")
-    file=csv.reader(fl,delimiter=",")
-    for row in file:
-        query = f"insert into {tname} values (%s,%s,%s,%s,%s,%s)"
-        myc.execute(query,(row[0],row[1],row[2],row[3],row[4],row[5]))
-        myc.execute("commit")
+    try:
+        csvname = input("Enter the name of your file with extension: ")
+        tname = csvname[0:-4]
+        fl1=open(csvname,"r")
+        Exam(tname)
+        file=csv.reader(fl1,delimiter=",")
+        for row in file:
+            query = f"insert into {tname} values (%s,%s,%s,%s,%s,%s)"
+            myc.execute(query,(row[0],row[1],row[2],row[3],row[4],row[5]))
+            myc.execute("commit")
+        
+    except :
+        print("File not found! Please re-enter.")
+        Toption(tid)
 # def check_exams():
 #     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
 #     myc=mydb.cursor()
@@ -197,7 +288,7 @@ def Qupdate():
 #     for i in range(len(e1)):
 #         if e1[i][0:4]=="exam":
 #              print(i+1,". ",e1[i])
-def check_exams():
+def check_exams(n):
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
     myc=mydb.cursor()
     myc.execute("Show tables")
@@ -205,15 +296,22 @@ def check_exams():
     e1=[]
     for item in exams:
         e1.append(item[0])
-    print("~AVAILABLE EXAMS~")
+    print()
+    print("\t\t        ***********************\n"
+                "\t\t\t| ~ Available Exams ~ |\n"
+          "\t\t        ***********************\n")
+    
+    count=0
     for item in e1:
          if(item[0:4]=="exam"):
-              print(item)
+              count=count+1
+              print(count,".",item)
+    print()
     choice = input("Enter the exam you want to appear: ")
     ans="answer"+choice[4::]+".csv"
-    print(ans)
+    # print(ans)
     a_list=ans_list(ans)
-    print(a_list)
+    # print(a_list)
     if choice in e1 :
         myc.execute(f"select qid from {choice}")
         qids = myc.fetchall()
@@ -247,12 +345,14 @@ def check_exams():
         d=myc.fetchone()
         print("D.",d[0])
         x=input("Enter YOUR FUCKING CHOICE: ")
-        if x == a_list[i][1]:
+        if x == a_list[i][1] or x == a_list[i][1].lower():
              marks+=1
         else:
-             print("WRONG ANSWER !! U DUMBASS - .. Must be women ☕ hahaahahah")
+             print("WRONG ANSWER !! ")    #U DUMBASS - .. Must be women ☕ hahaahahah
     print("TOTAL MARKS: ",marks)
-    return marks
+    q="insert into smarks values(%s,%s)"
+    myc.execute(q,(n,marks))
+    mydb.commit()
 
 def ans_list(a):
     fl=open(a,"r")
@@ -269,12 +369,23 @@ def ans_list(a):
 # Exam()
 # Qupdate()
 # check_exams()
-# SMarks()
 # Soption()
 # ans()
-SLentry()
-# menu()
+def title():
+    print()
+    print()
+    print()
+    print("\t\t        ******************************\n"
+                "\t\t\t| ~ MCQ EXAMINATION PORTAL ~ |\n"
+          "\t\t        ******************************\n"
+                )
+    print("")
+
+# SLentry()
+# print("")
+menu() 
 # TLogin()
 # Tdetails()
-# SLogin()
+# SLogin()       
 # Sdetails()
+# SMarks()         
