@@ -1,8 +1,16 @@
 import mysql.connector as mq
 import csv
 from datetime import date
-pwsd = input("Enter your password: ")
-db =input("Enter your database: ")
+
+def titlee():
+    print()
+    print()
+    print()
+    print("\t\t        ******************************\n"
+                "\t\t\t| ~ MCQ EXAMINATION PORTAL ~ |\n"
+          "\t\t        ******************************\n"
+                )
+    print("")
 def Tdetails():
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
     myc=mydb.cursor()
@@ -26,13 +34,14 @@ def SLogin():
     myc.execute("drop table if exists SLogin ")
     myc.execute("create table SLogin(uid varchar(20), pwd varchar(10), primary key(uid))")
     myc.execute("commit")
+    myc.close()
 
 def TLogin():
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
     myc=mydb.cursor()
     myc.execute("drop table if exists Tdetails ")
     myc.execute("drop table if exists TLogin ")
-    myc.execute("create table TLogin(uid varcahr(20), pwd varchar(10), primary key(uid))")
+    myc.execute("create table TLogin(uid varchar(20), pwd varchar(10), primary key(uid))")
     myc.execute("commit")
 
 def SMarks():
@@ -47,10 +56,10 @@ def Sdentry():
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
     myc=mydb.cursor()
     uid=input("Enter your User-ID: ")
-    sid=input("Enter your Student-ID: ")
+    sid=input("Enter your Student-ID(RollNo.): ")
     pwd=input("Enter the password: ")
     name=input("Enter your name: ")
-    dob=input("Enter your date of birth: ")
+    dob=input("Enter your date of birth(YYYY-MM-DD): ")
     clas=int(input("Enter the class: "))
     con=int(input("Enter your contact no: "))
     info="INSERT into Sdetails values ('{}','{}','{}',{},'{}',{})".format(uid,sid,name,clas,dob,con)
@@ -67,20 +76,21 @@ def SLentry():
           "\t\t        ********************\n","\t")
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
     myc=mydb.cursor()
-    name = input("Enter your username(uid): ")
-    passw = input("Enter your new Password: ")
-    q="select pwd from SLogin where uid='{}'".format(name)
+    uid = input("Enter your username(uid): ")
+    passw = input("Enter your Password: ")
+    q="select pwd from SLogin where uid='{}'".format(uid)
     myc.execute(q)
     x=myc.fetchone()
-    try:
-        if passw == x[0]:
-            print ("Login Sucessfull")
-            Soption(name)
-        else:
-            print("Person Not Found")
-    except TypeError:
-        print("Type Error... try again.")
-        Smenu()
+# try:
+    if passw == x[0]:
+        print ("Login Sucessfull")
+        Soption(uid)
+    else:
+        print("Person Not Found")
+        SLentry()
+# except TypeError:
+    print("Type Error... try again.")
+    Smenu()
     myc.close()
 
 def TLentry():
@@ -108,7 +118,7 @@ def Tdentry():
     print("Signing you up......")
     try:
         uid=input("Enter your Teacher-ID: ")
-        tid=input("Enter your Teacher-ID: ")
+        tid=input("Enter your Teacher-ID(Roll.): ")
         pwd=input("Enter your password-")
         name=input("Enter your name: ")
         sub=input("Enter the suject you are expertised in: ")
@@ -116,10 +126,11 @@ def Tdentry():
         sal=float(input("Enter your Salary: "))
         doj=input("Enter your Date of Joining(yyyy-mm-dd): ")
         con=int(input("Enter your contact no: "))
-        info="INSERT into Tdetails values ({},{},'{}','{}',{},'{}','{}',{})".format(uid,tid,name,dob,sal,doj,sub,con)
-        info1="INSERT into TLogin values ({},'{}')".format(uid,pwd)
+        info="INSERT into Tdetails values ('{}',{},'{}','{}',{},'{}','{}',{})".format(uid,tid,name,dob,sal,doj,sub,con)
+        info1="INSERT into TLogin values ('{}','{}')".format(uid,pwd)
         myc.execute(info1)
         myc.execute(info)
+        Tmenu()
     except:
         print("Error!... Sign up and Try again.")
         Tmenu()
@@ -128,7 +139,6 @@ def Tdentry():
 
 
 def menu():
-    title()
     print("\t   ENTER 1 IF YOU ARE A STUDENT. \n\t   ENTER 2 IF YOU ARE A TEACHER.\n\t   ENTER 3 TO EXIT.\n")
     try:
         a=int(input("Enter your choice: "))
@@ -221,17 +231,16 @@ def Toption(tid):
 def Soption(uid):
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
     myc=mydb.cursor()
-    p=uid
     # today = date.today()
     print()
     print("\t\t        *********************\n"
                 "\t\t\t| ~ O P T I O N S ~ |\n"
-          "\t\t        *********************\n","\t \nPress 1 to Check available exams. \nPress 2 to Check Marks. \nPress 3 to LOG OUT")
+          "\t\t        *********************\n","\t \nPress 1 to Check available exams. \nPress 2 to Check Marks. \nPress 3 to LOG OUT\n")
     try:
         choice = int(input("Enter your choice: "))
         if choice == 1:
             check_exams(uid)
-            Soption(p)
+            Soption(uid)
         if choice == 2:
             query="select * from smarks where uid=%s"
             myc.execute(query,(uid,))
@@ -246,8 +255,9 @@ def Soption(uid):
         elif choice !=1 and choice !=2 and choice !=3 :
             print("Wrong input ! . . . enter your choice again....")
             Soption(uid)
-    except ValueError:
+    except (ValueError):
         print('Value Error')
+        Soption(uid)
 
 def Exam(x):
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
@@ -315,9 +325,13 @@ def check_exams(n):
     if choice in e1 :
         myc.execute(f"select qid from {choice}")
         qids = myc.fetchall()
-    qid=[]
-    for item in qids:
-        qid.append(item[0])
+    try:
+        qid=[]
+        for item in qids:
+            qid.append(item[0])
+    except UnboundLocalError:
+        print("No such exam exists.")
+        check_exams(n)
     # print(qid)
     marks=0
     for i in range(len(qid)):
@@ -355,37 +369,74 @@ def check_exams(n):
     mydb.commit()
 
 def ans_list(a):
-    fl=open(a,"r")
-    file=csv.reader(fl,delimiter=",")
-    q="A"
+    try:
+        fl=open(a,"r")
+        file=csv.reader(fl,delimiter=",")
+    except FileNotFoundError:
+        print("File not found... Enter again.")
+        Soption(a)
+    #q="A"
     answers=[]
     for row in file:
         answers.append(row)
     # print(answers)
     return answers
             
-        
+def db_Tcheck(pwsd,db):
+    mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
+    myc=mydb.cursor()
+    myc.execute("Show tables")
+    values=['exam1', 'exam2', 'exam3', 'exam4', 'sdetails', 'slogin', 'smarks', 'tdetails', 'tlogin']
+    tables = myc.fetchall()
+    l=[]
+    for i in range(len(tables)):
+        l.append(tables[i][0])
+    
+    if all(value in l for value in values):
+        # print("1")    code checking 
+        titlee()
+        menu()
+    else:
+        print("Creating required databases......")
+        SLogin()       
+        Sdetails()
+        TLogin()
+        Tdetails()
+        SMarks()
+        #print("2")    code checking
+        menu()         
 
+pwsd = input("Enter your MySql password: ")
+db =input("Enter The database you want to use: ")
+def db_check(pwsd,db):
+    mydb=mq.connect(host="localhost",user="root",password=pwsd)
+    myc=mydb.cursor()
+    myc.execute("show databases")
+    dbb=myc.fetchall()
+    l1=[]
+    for i in range(len(dbb)):
+        l1.append(dbb[i][0])
+    if db in l1:
+        # print("true")
+        db_Tcheck(pwsd,db)
+    elif db != l1:
+        print("Database doesnot exist.\nPlease enter the correct Database name.\nclosing.....")
+    # print(l1)
+    # if db in l1:
+    #     db_Tcheck()
+    # else:
+    #     print("Wrong Database input...Try again with corrent database name and password..")
+    #     db_check(pwsd,db)
+db_check(pwsd,db)
+
+# titlee()
 # Exam()
+
 # Qupdate()
 # check_exams()
 # Soption()
 # ans()
-def title():
-    print()
-    print()
-    print()
-    print("\t\t        ******************************\n"
-                "\t\t\t| ~ MCQ EXAMINATION PORTAL ~ |\n"
-          "\t\t        ******************************\n"
-                )
-    print("")
 
 # SLentry()
 # print("")
-TLogin()
-Tdetails()
-SLogin()       
-Sdetails()
-menu() 
-# SMarks()         
+# menu() 
