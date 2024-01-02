@@ -15,7 +15,7 @@ def Tdetails():
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
     myc=mydb.cursor()
     myc.execute("drop table if exists Tdetails ")
-    myc.execute("create table Tdetails(uid varchar(20), TID int, Name varchar(35), dob date, Salary float, doj date, Subject varchar(50), Contact bigint, primary key(TID),foreign key(uid) references Tlogin(uid))")
+    myc.execute("create table Tdetails(uid varchar(20), TID int, Name varchar(35), dob date, Salary float,doj date, Subject varchar(50), Contact bigint, primary key(TID),foreign key(uid) references Tlogin(uid))")
     myc.execute("commit")
     myc.close()
 
@@ -130,11 +130,11 @@ def Tdentry():
         info1="INSERT into TLogin values ('{}','{}')".format(uid,pwd)
         myc.execute(info1)
         myc.execute(info)
+        myc.execute("commit")
         Tmenu()
     except:
         print("Error!... Sign up and Try again.")
         Tmenu()
-    myc.execute("commit")
     myc.close()
 
 
