@@ -383,9 +383,9 @@ def title():
 
 # SLentry()
 # print("")
+TLogin()
+Tdetails()
+SLogin()       
+Sdetails()
 menu() 
-# TLogin()
-# Tdetails()
-# SLogin()       
-# Sdetails()
 # SMarks()         
