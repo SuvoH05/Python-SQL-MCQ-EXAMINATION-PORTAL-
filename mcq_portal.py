@@ -132,7 +132,7 @@ def Tdentry():
         myc.execute(info)
         myc.execute("commit")
         Tmenu()
-    except:
+    except ValueError:
         print("Error!... Sign up and Try again.")
         Tmenu()
     myc.close()
