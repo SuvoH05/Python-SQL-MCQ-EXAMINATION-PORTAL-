@@ -80,18 +80,18 @@ def SLentry():
     passw = input("Enter your Password: ")
     q="select pwd from SLogin where uid='{}'".format(uid)
     myc.execute(q)
-    x=myc.fetchone()
-# try:
-    if passw == x[0]:
-        print ("Login Sucessfull")
-        Soption(uid)
-    else:
-        print("Person Not Found")
-        SLentry()
-# except TypeError:
-    print("Type Error... try again.")
-    Smenu()
-    myc.close()
+    x=myc.fetchone()    
+    try:
+        if passw == x[0]:
+            print ("Login Sucessfull")
+            Soption(uid)
+        else:
+            print("Person Not Found")
+            SLentry()
+    except TypeError:
+        print("Type Error... try again.")
+        Smenu()
+        myc.close()
 
 def TLentry():
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
@@ -117,7 +117,7 @@ def Tdentry():
     myc=mydb.cursor()
     print("Signing you up......")
     try:
-        uid=input("Enter your Teacher-ID: ")
+        uid=input("Enter your User-ID: ")
         tid=input("Enter your Teacher-ID(Roll.): ")
         pwd=input("Enter your password-")
         name=input("Enter your name: ")
@@ -199,7 +199,7 @@ def Tmenu():
 def Toption(tid):
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
     myc=mydb.cursor()
-    #print("~Teacher MENU~ \nPress 1 to Upload Question paper. \nPress 2 to Check marks of the students. \nPress 3 to check Your Profile")
+    
     print()
     print("\t\t        *********************\n"
                 "\t\t\t| ~ O P T I O N S ~ |\n"
@@ -231,7 +231,7 @@ def Toption(tid):
 def Soption(uid):
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
     myc=mydb.cursor()
-    # today = date.today()
+    
     print()
     print("\t\t        *********************\n"
                 "\t\t\t| ~ O P T I O N S ~ |\n"
@@ -286,19 +286,7 @@ def Qupdate(tid):
     except FileNotFoundError:
         print("File not found! Please re-enter.")
         Toption(tid)
-# def check_exams():
-#     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
-#     myc=mydb.cursor()
-#     myc.execute("show tables")
-#     exams=myc.fetchall()
-#     print(exams)
-#     e1=[]
-#     print("~AVAILABLE EXAMS~")
-#     for items in exams:
-#         e1.append(items[0])
-#     for i in range(len(e1)):
-#         if e1[i][0:4]=="exam":
-#              print(i+1,". ",e1[i])
+
 def check_exams(n):
     mydb=mq.connect(host="localhost",user="root",password=pwsd,database=db)
     myc=mydb.cursor()
@@ -320,9 +308,9 @@ def check_exams(n):
     print()
     choice = input("Enter the exam you want to appear: ")
     ans="answer"+choice[4::]+".csv"
-    # print(ans)
+    # print(ans) check
     a_list=ans_list(ans)
-    # print(a_list)
+    # print(a_list)   check
     if choice in e1 :
         myc.execute(f"select qid from {choice}")
         qids = myc.fetchall()
@@ -333,16 +321,16 @@ def check_exams(n):
     except UnboundLocalError:
         print("No such exam exists.")
         check_exams(n)
-    # print(qid)
+    
     marks=0
     for i in range(len(qid)):
         opt=["A","B","C","D"]
         qn = "QC0"+str(i+1)
-        # myc.execute(f"select question from {choice} where qid="{}"".format(qn))
+        
         query = f"select question from {choice} where qid=%s"
         myc.execute(query,(qn,))
         p=myc.fetchone()
-        print(i+1,".",p[0])
+        print("\n",i+1,".",p[0])
         query = f"select op1 from {choice} where qid=%s"
         myc.execute(query,(qn,))
         a=myc.fetchone()
@@ -359,12 +347,12 @@ def check_exams(n):
         myc.execute(query,(qn,))
         d=myc.fetchone()
         print("D.",d[0])
-        x=input("Enter YOUR FUCKING CHOICE: ")
+        x=input("ENTER YOUR CHOICE: ")
         if x == a_list[i][1] or x == a_list[i][1].lower():
              marks+=1
         else:
-             print("WRONG ANSWER !! ")    #U DUMBASS - .. Must be women ☕ hahaahahah
-    print("TOTAL MARKS: ",marks)
+             print("WRONG ANSWER !! ")    
+    print("\nTOTAL MARKS: ",marks)
     q="insert into smarks values(%s,%s)"
     myc.execute(q,(n,marks))
     mydb.commit()
@@ -418,26 +406,8 @@ def db_check(pwsd,db):
     for i in range(len(dbb)):
         l1.append(dbb[i][0])
     if db in l1:
-        # print("true")
         db_Tcheck(pwsd,db)
     elif db != l1:
         print("Database doesnot exist.\nPlease enter the correct Database name.\nclosing.....")
-    # print(l1)
-    # if db in l1:
-    #     db_Tcheck()
-    # else:
-    #     print("Wrong Database input...Try again with corrent database name and password..")
-    #     db_check(pwsd,db)
+
 db_check(pwsd,db)
-
-# titlee()
-# Exam()
-
-# Qupdate()
-# check_exams()
-# Soption()
-# ans()
-
-# SLentry()
-# print("")
-# menu() 
