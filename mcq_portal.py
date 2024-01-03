@@ -281,8 +281,9 @@ def Qupdate(tid):
             query = f"insert into {tname} values (%s,%s,%s,%s,%s,%s)"
             myc.execute(query,(row[0],row[1],row[2],row[3],row[4],row[5]))
             myc.execute("commit")
+        print("\n File added.")
         
-    except :
+    except FileNotFoundError:
         print("File not found! Please re-enter.")
         Toption(tid)
 # def check_exams():
