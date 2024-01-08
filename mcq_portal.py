@@ -68,6 +68,7 @@ def Sdentry():
     myc.execute(info)
     myc.execute("commit")
     myc.close()
+    print("\n User added !")
     Smenu()
 def SLentry():
     print()
@@ -131,6 +132,7 @@ def Tdentry():
         myc.execute(info1)
         myc.execute(info)
         myc.execute("commit")
+        print("\n User added ! ")
         Tmenu()
     except ValueError:
         print("Error!... Sign up and Try again.")
@@ -168,6 +170,7 @@ def Smenu():
             if c == 2:
                 Sdentry()
             if c == 3:
+                titlee()
                 menu()
             elif c != 1 and c != 2 and c != 3:
                 print("Wrong input ! . . . enter your choice again....")
@@ -189,6 +192,7 @@ def Tmenu():
             if c == 2:
                 Tdentry()
             if c == 3:
+                titlee()
                 menu()
             elif c != 1 and c != 2 and c != 3:
                     print("Wrong input ! . . . enter your choice again....")
@@ -220,6 +224,7 @@ def Toption(tid):
                 print("\t\tStudent:",marks[i][0],", Marks",marks[i][1])
             Toption(tid)
         if (choice) == 3:
+            titlee()
             Tmenu()
         elif (choice) !=1 and choice !=2 and choice !=3 :
             print("Wrong input ! . . . enter your choice again....")
@@ -250,6 +255,7 @@ def Soption(uid):
                 print("\t\tExam no.",i+1," Marks: ",marks[i][1])
             Soption(uid)
         if choice == 3:
+            titlee()
             menu()
         
         elif choice !=1 and choice !=2 and choice !=3 :
